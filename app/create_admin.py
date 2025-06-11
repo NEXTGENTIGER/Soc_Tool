@@ -1,5 +1,5 @@
 from app.models import User
-from app.database import SessionLocal
+from app.database import SessionLocal, Base, engine
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -14,4 +14,7 @@ if not db.query(User).filter_by(username="admin").first():
     print("Admin user created!")
 else:
     print("Admin user already exists.")
-db.close() 
+db.close()
+
+# Ceci va créer toutes les tables définies dans tes modèles si elles n'existent pas
+Base.metadata.create_all(bind=engine) 
