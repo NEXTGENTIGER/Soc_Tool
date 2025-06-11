@@ -6,8 +6,16 @@ from typing import Optional, List
 from datetime import datetime
 
 from . import models, schemas, security
+from app.database import SessionLocal
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
